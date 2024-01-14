@@ -39,15 +39,17 @@ export function handleCreate(event: CreateEvent): void {
 
 export function handleRemove(event: RemoveEvent): void {
   newRemove(event);
+  const asset = getOrCreateAsset(event.params.assetId);
+  asset.removed = true;
+  asset.save();
 }
 
 export function handleTrade(event: TradeEvent): void {
   const trader = getOrCreateUser(event.params.sender);
-  newTrade(event, trader);
+  const asset = getOrCreateAsset(event.params.assetId);
+  newTrade(event, trader, asset);
 
   const deltaAmount = fromWei(event.params.tokenAmount);
-
-  const asset = getOrCreateAsset(event.params.assetId);
   asset.totalTrades = asset.totalTrades.plus(BI_ONE);
   trader.totalTrades = trader.totalTrades.plus(BI_ONE);
   if (event.params.tradeType == 0) {

@@ -22,6 +22,7 @@ type Trade @entity(immutable: true) {
   id: Bytes!
   tradeType: Int! # uint8
   assetId: BigInt! # uint256
+  assetRemoved: Boolean!
   user: User! # address
   tokenAmount: BigDecimal!
   ethAmount: BigDecimal!
@@ -73,5 +74,6 @@ type Asset @entity {
   totalFees: BigDecimal!
   totalVolume: BigDecimal!
   totalHolders: BigInt!
+  removed: Boolean!
   holders: [UserAsset!]! @derivedFrom(field: "asset")
 }

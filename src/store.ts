@@ -50,7 +50,7 @@ export function newRemove(event: RemoveEvent): void {
   entity.save();
 }
 
-export function newTrade(event: TradeEvent, user: User): void {
+export function newTrade(event: TradeEvent, user: User, asset: Asset): void {
   let entity = new Trade(
     event.transaction.hash
       .concat(Bytes.fromUTF8("-"))
@@ -58,6 +58,7 @@ export function newTrade(event: TradeEvent, user: User): void {
   );
   entity.tradeType = event.params.tradeType;
   entity.assetId = event.params.assetId;
+  entity.assetRemoved = asset.removed;
   entity.user = user.id;
   entity.tokenAmount = fromWei(event.params.tokenAmount);
   entity.ethAmount = fromWei(event.params.ethAmount);
@@ -149,6 +150,7 @@ export function getOrCreateAsset(id: BigInt): Asset {
     asset.totalFees = BD_ZERO;
     asset.totalVolume = BD_ZERO;
     asset.totalHolders = BI_ZERO;
+    asset.removed = false;
     asset.save();
   }
   return asset;
