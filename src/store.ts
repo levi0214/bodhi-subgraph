@@ -58,7 +58,7 @@ export function newTrade(event: TradeEvent, user: User, asset: Asset): void {
   );
   entity.tradeType = event.params.tradeType;
   entity.assetId = event.params.assetId;
-  entity.assetRemoved = asset.removed;
+  entity.asset = asset.id;
   entity.user = user.id;
   entity.tokenAmount = fromWei(event.params.tokenAmount);
   entity.ethAmount = fromWei(event.params.ethAmount);

@@ -22,7 +22,7 @@ type Trade @entity(immutable: true) {
   id: Bytes!
   tradeType: Int! # uint8
   assetId: BigInt! # uint256
-  assetRemoved: Boolean!
+  asset: Asset!
   user: User! # address
   tokenAmount: BigDecimal!
   ethAmount: BigDecimal!
