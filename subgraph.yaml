@@ -15,10 +15,6 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Create
-        # - Remove
-        # - Trade
-        # - TransferBatch
-        # - TransferSingle
       abis:
         - name: Bodhi
           file: ./abis/Bodhi.json
@@ -34,3 +30,23 @@ dataSources:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
       file: ./src/bodhi.ts
+  - kind: ethereum
+    name: SpaceFactory
+    network: mainnet  # need to change before deploy
+    source:
+      address: "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690"
+      abi: SpaceFactory
+      startBlock: 0  # need to change before deploy
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - SpaceFactoryCreate
+      abis:
+        - name: SpaceFactory
+          file: ./abis/SpaceFactory.json
+      eventHandlers:
+        - event: Create(uint256,indexed address,indexed uint256,address)
+          handler: handleSpaceCreate
+      file: ./src/space-factory.ts

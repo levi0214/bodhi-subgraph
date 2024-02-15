@@ -77,3 +77,22 @@ type Asset @entity {
   removed: Boolean!
   holders: [UserAsset!]! @derivedFrom(field: "asset")
 }
+
+type SpaceFactoryCreate @entity(immutable: true) {
+  id: Bytes!
+  spaceId: BigInt! # uint256
+  spaceAddress: Bytes! # address
+  assetId: BigInt! # uint256
+  creator: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Space @entity {
+  id: ID!
+  spaceId: BigInt!
+  spaceAddress: Bytes! # address
+  creator: User!
+  asset: Asset!
+}
