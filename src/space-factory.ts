@@ -1,27 +1,23 @@
 import { Create as CreateEvent } from "../generated/SpaceFactory/SpaceFactory"
-import { SpaceFactoryCreate, Space } from "../generated/schema"
+import { SpaceCreateEvent, Space } from "../generated/schema"
 import { getOrCreateAsset, getOrCreateUser } from "./store"
 import { Space as SpaceContract } from '../generated/templates'
 
-function newSpaceFactoryCreate(event: CreateEvent): void {
-  let spaceFactoryCreate = new SpaceFactoryCreate(
+function newSpaceCreateEvent(event: CreateEvent): void {
+  let spaceCreateEvent = new SpaceCreateEvent(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  spaceFactoryCreate.spaceId = event.params.spaceId
-  spaceFactoryCreate.spaceAddress = event.params.spaceAddress
-  spaceFactoryCreate.assetId = event.params.assetId
-  spaceFactoryCreate.creator = event.params.creator
-
-  spaceFactoryCreate.blockNumber = event.block.number
-  spaceFactoryCreate.blockTimestamp = event.block.timestamp
-  spaceFactoryCreate.transactionHash = event.transaction.hash
-
-  spaceFactoryCreate.save()
+  spaceCreateEvent.spaceId = event.params.spaceId
+  spaceCreateEvent.spaceAddress = event.params.spaceAddress
+  spaceCreateEvent.assetId = event.params.assetId
+  spaceCreateEvent.creator = event.params.creator
+  spaceCreateEvent.blockNumber = event.block.number
+  spaceCreateEvent.blockTimestamp = event.block.timestamp
+  spaceCreateEvent.transactionHash = event.transaction.hash
+  spaceCreateEvent.save()
 }
 
-export function handleSpaceCreate(event: CreateEvent): void {
-  newSpaceFactoryCreate(event)
-  
+function newSpace(event: CreateEvent): void {
   let space = new Space(event.params.spaceAddress.toHexString())
   const asset = getOrCreateAsset(event.params.assetId)
   const creator = getOrCreateUser(event.params.creator)
@@ -30,6 +26,10 @@ export function handleSpaceCreate(event: CreateEvent): void {
   space.spaceId = event.params.spaceId
   space.spaceAddress = event.params.spaceAddress
   space.save()
-  
-  SpaceContract.create(event.params.spaceAddress)
+}
+
+export function handleSpaceCreate(event: CreateEvent): void {
+  newSpaceCreateEvent(event)
+  newSpace(event)
+  SpaceContract.create(event.params.spaceAddress)  // Space contract instance
 }

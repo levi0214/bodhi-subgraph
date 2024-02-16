@@ -1,3 +1,4 @@
+# Bodhi
 type Create @entity(immutable: true) {
   id: Bytes!
   assetId: BigInt! # uint256
@@ -77,7 +78,8 @@ type Asset @entity {
   holders: [UserAsset!]! @derivedFrom(field: "asset")
 }
 
-type SpaceFactoryCreate @entity(immutable: true) {
+# Space
+type SpaceCreateEvent @entity(immutable: true) {
   id: Bytes!
   spaceId: BigInt! # uint256
   spaceAddress: Bytes! # address
@@ -88,15 +90,7 @@ type SpaceFactoryCreate @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type Space @entity {
-  id: ID!
-  spaceId: BigInt!
-  spaceAddress: Bytes! # address
-  creator: User!
-  asset: Asset!
-}
-
-type SpaceCreate @entity(immutable: true) {
+type SpacePostCreateEvent @entity(immutable: true) {
   id: Bytes!
   space: Space!
   spaceId: BigInt! # uint256, for query
@@ -107,3 +101,31 @@ type SpaceCreate @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
+# type SpacePostRemoveEvent @entity(immutable: true) {
+#   id: Bytes!
+#   space: Space!
+#   spaceId: BigInt! # uint256, for query
+#   assetId: BigInt! # uint256
+#   user: User!
+#   blockNumber: BigInt!
+#   blockTimestamp: BigInt!
+#   transactionHash: Bytes!
+# }
+
+type Space @entity {
+  id: ID! # space contract address
+  spaceId: BigInt!
+  spaceAddress: Bytes! # address
+  creator: User!
+  asset: Asset!
+}
+
+# type SpacePost @entity {
+#   id: ID!
+#   space: Space!
+#   isTopic: Boolean!
+#   topicId: BigInt!
+#   assetId: BigInt!
+#   creator: User!
+# }
