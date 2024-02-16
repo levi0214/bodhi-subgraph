@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Bodhi
-    network: optimism
+    network: mainnet  # change before deploy to production
     source:
-      address: "0x2AD82A4E39Bac43A54DdfE6f94980AAf0D1409eF"
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
       abi: Bodhi
-      startBlock: 113209482
+      startBlock: 0
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -50,3 +50,24 @@ dataSources:
         - event: Create(uint256,indexed address,indexed uint256,address)
           handler: handleSpaceCreate
       file: ./src/space-factory.ts
+templates:
+  - kind: ethereum
+    name: Space
+    network: mainnet
+    source:
+      abi: Space
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - SpaceCreate
+      abis:
+        - name: Space
+          file: ./abis/Space.json
+      eventHandlers:
+        - event: Create(indexed uint256,indexed uint256,indexed address)
+          handler: handlePostCreate
+        - event: Remove(indexed uint256,indexed address)
+          handler: handlePostRemove
+      file: ./src/space.ts

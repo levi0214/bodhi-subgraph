@@ -1,8 +1,12 @@
 {
-  "optimism": {
+  "local": {
     "Bodhi": {
-      "address": "0x2AD82A4E39Bac43A54DdfE6f94980AAf0D1409eF",
-      "startBlock": 113209482
+      "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "startBlock": 0
+    },
+    "SpaceFactory": {
+      "address": "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690",
+      "startBlock": 0
     }
   }
 }

@@ -1,6 +1,7 @@
 import { Create as CreateEvent } from "../generated/SpaceFactory/SpaceFactory"
 import { SpaceFactoryCreate, Space } from "../generated/schema"
 import { getOrCreateAsset, getOrCreateUser } from "./store"
+import { Space as SpaceContract } from '../generated/templates'
 
 function newSpaceFactoryCreate(event: CreateEvent): void {
   let spaceFactoryCreate = new SpaceFactoryCreate(
@@ -20,8 +21,8 @@ function newSpaceFactoryCreate(event: CreateEvent): void {
 
 export function handleSpaceCreate(event: CreateEvent): void {
   newSpaceFactoryCreate(event)
-
-  let space = new Space(event.params.spaceId.toString())
+  
+  let space = new Space(event.params.spaceAddress.toHexString())
   const asset = getOrCreateAsset(event.params.assetId)
   const creator = getOrCreateUser(event.params.creator)
   space.asset = asset.id
@@ -29,4 +30,6 @@ export function handleSpaceCreate(event: CreateEvent): void {
   space.spaceId = event.params.spaceId
   space.spaceAddress = event.params.spaceAddress
   space.save()
+  
+  SpaceContract.create(event.params.spaceAddress)
 }

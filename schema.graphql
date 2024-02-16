@@ -1,4 +1,3 @@
-
 type Create @entity(immutable: true) {
   id: Bytes!
   assetId: BigInt! # uint256
@@ -95,4 +94,16 @@ type Space @entity {
   spaceAddress: Bytes! # address
   creator: User!
   asset: Asset!
+}
+
+type SpaceCreate @entity(immutable: true) {
+  id: Bytes!
+  space: Space!
+  spaceId: BigInt! # uint256, for query
+  topicId: BigInt! # uint256
+  assetId: BigInt! # uint256
+  creator: User!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
