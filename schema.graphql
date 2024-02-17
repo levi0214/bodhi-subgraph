@@ -102,17 +102,6 @@ type SpacePostCreateEvent @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-# type SpacePostRemoveEvent @entity(immutable: true) {
-#   id: Bytes!
-#   space: Space!
-#   spaceId: BigInt! # uint256, for query
-#   assetId: BigInt! # uint256
-#   user: User!
-#   blockNumber: BigInt!
-#   blockTimestamp: BigInt!
-#   transactionHash: Bytes!
-# }
-
 type Space @entity {
   id: ID! # space contract address
   spaceId: BigInt!
@@ -121,11 +110,11 @@ type Space @entity {
   asset: Asset!
 }
 
-# type SpacePost @entity {
-#   id: ID!
-#   space: Space!
-#   isTopic: Boolean!
-#   topicId: BigInt!
-#   assetId: BigInt!
-#   creator: User!
-# }
+type SpacePost @entity {
+  id: ID! # asset id
+  spaceId: BigInt!
+  asset: Asset!
+  creator: User!
+  isTopic: Boolean!
+  toTopic: BigInt!
+}
