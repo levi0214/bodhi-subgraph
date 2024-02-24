@@ -19,10 +19,16 @@ function newSpaceCreateEvent(event: CreateEvent): void {
 
 function newSpace(event: CreateEvent): void {
   let space = new Space(event.params.spaceAddress.toHexString())
+  
   const asset = getOrCreateAsset(event.params.assetId)
-  const creator = getOrCreateUser(event.params.creator)
   space.asset = asset.id
+  
+  const creator = getOrCreateUser(event.params.creator)
   space.creator = creator.id
+  
+  const spaceAsUser = getOrCreateUser(event.params.spaceAddress)
+  space.user = spaceAsUser.id
+  
   space.spaceId = event.params.spaceId
   space.spaceAddress = event.params.spaceAddress
   space.save()

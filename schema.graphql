@@ -108,6 +108,7 @@ type Space @entity {
   spaceAddress: Bytes! # address
   creator: User!
   asset: Asset!
+  user: User! # space as user (for revenue)
 }
 
 type SpacePost @entity {
