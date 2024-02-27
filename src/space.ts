@@ -1,6 +1,7 @@
 import { Create as CreateEvent, Remove as RemoveEvent } from "../generated/templates/Space/Space"
 import { SpacePostCreateEvent, Space, SpacePost } from "../generated/schema"
 import { getOrCreateUser, getOrCreateAsset } from "./store"
+import { BI_ZERO, BI_ONE } from "./number";
 
 export function handlePostCreate(event: CreateEvent): void {
   // Space Post Create Event
@@ -32,7 +33,16 @@ export function handlePostCreate(event: CreateEvent): void {
   post.creator = creator.id
   post.isTopic = event.params.assetId == event.params.topicId
   post.toTopic = event.params.topicId
+  post.totalReplies = BI_ZERO
   post.save()
+
+  // Topic: totalReplies + 1
+  if (!post.isTopic) {
+    let topic = SpacePost.load(event.params.topicId.toString())
+    if (topic == null) return
+    topic.totalReplies = topic.totalReplies.plus(BI_ONE)
+    topic.save()
+  }
 }
 
 // TODO handle post remove

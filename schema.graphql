@@ -118,4 +118,5 @@ type SpacePost @entity {
   creator: User!
   isTopic: Boolean!
   toTopic: BigInt!
+  totalReplies: BigInt!
 }
