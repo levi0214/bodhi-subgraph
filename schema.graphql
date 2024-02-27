@@ -109,6 +109,7 @@ type Space @entity {
   creator: User!
   asset: Asset!
   user: User! # space as user (for revenue)
+  totalPosts: BigInt!
 }
 
 type SpacePost @entity {

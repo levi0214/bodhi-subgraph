@@ -2,6 +2,7 @@ import { Create as CreateEvent } from "../generated/SpaceFactory/SpaceFactory"
 import { SpaceCreateEvent, Space } from "../generated/schema"
 import { getOrCreateAsset, getOrCreateUser } from "./store"
 import { Space as SpaceContract } from '../generated/templates'
+import { BI_ZERO } from "./number"
 
 function newSpaceCreateEvent(event: CreateEvent): void {
   let spaceCreateEvent = new SpaceCreateEvent(
@@ -31,6 +32,7 @@ function newSpace(event: CreateEvent): void {
   
   space.spaceId = event.params.spaceId
   space.spaceAddress = event.params.spaceAddress
+  space.totalPosts = BI_ZERO
   space.save()
 }
 

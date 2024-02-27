@@ -1,31 +1,25 @@
 import { Create as CreateEvent, Remove as RemoveEvent } from "../generated/templates/Space/Space"
-import { SpacePostCreateEvent, Space, SpacePost } from "../generated/schema"
+import { SpacePostCreateEvent, Space, SpacePost, User } from "../generated/schema"
 import { getOrCreateUser, getOrCreateAsset } from "./store"
 import { BI_ZERO, BI_ONE } from "./number";
 
-export function handlePostCreate(event: CreateEvent): void {
-  // Space Post Create Event
-  let spacePostCreateEvent = new SpacePostCreateEvent(
+function newSpacePostCreateEvent(event: CreateEvent, space: Space, creator: User): void {
+  let postEvent = new SpacePostCreateEvent(
     event.transaction.hash.concatI32(event.logIndex.toI32())
     )
-    
-  spacePostCreateEvent.topicId = event.params.topicId
-  spacePostCreateEvent.assetId = event.params.assetId
-  
-  const creator = getOrCreateUser(event.params.sender)
-  spacePostCreateEvent.creator = creator.id
-  
-  let space = Space.load(event.address.toHexString());
-  if (space == null) return;
-  spacePostCreateEvent.space = space.id;
-  spacePostCreateEvent.spaceId = space.spaceId;
 
-  spacePostCreateEvent.blockNumber = event.block.number
-  spacePostCreateEvent.blockTimestamp = event.block.timestamp
-  spacePostCreateEvent.transactionHash = event.transaction.hash
-  spacePostCreateEvent.save()
+  postEvent.topicId = event.params.topicId
+  postEvent.assetId = event.params.assetId
+  postEvent.creator = creator.id
+  postEvent.space = space.id;
+  postEvent.spaceId = space.spaceId;
+  postEvent.blockNumber = event.block.number
+  postEvent.blockTimestamp = event.block.timestamp
+  postEvent.transactionHash = event.transaction.hash
+  postEvent.save()
+}
 
-  // Space Post
+function newSpacePost(event: CreateEvent, space: Space, creator: User): void {
   const asset = getOrCreateAsset(event.params.assetId)
   let post = new SpacePost(event.params.assetId.toString())
   post.spaceId = space.spaceId  // changed to spaceId from space
@@ -35,14 +29,27 @@ export function handlePostCreate(event: CreateEvent): void {
   post.toTopic = event.params.topicId
   post.totalReplies = BI_ZERO
   post.save()
+}
 
-  // Topic: totalReplies + 1
-  if (!post.isTopic) {
+function updateTotalReplies(event: CreateEvent): void {
+  if (event.params.assetId != event.params.topicId) {
     let topic = SpacePost.load(event.params.topicId.toString())
     if (topic == null) return
     topic.totalReplies = topic.totalReplies.plus(BI_ONE)
     topic.save()
   }
+}
+
+export function handlePostCreate(event: CreateEvent): void {
+  let space = Space.load(event.address.toHexString());
+  if (space == null) return;
+  space.totalPosts = space.totalPosts.plus(BI_ONE)
+  space.save()
+
+  const creator = getOrCreateUser(event.params.sender)
+  newSpacePostCreateEvent(event, space, creator)
+  newSpacePost(event, space, creator)
+  updateTotalReplies(event)
 }
 
 // TODO handle post remove
