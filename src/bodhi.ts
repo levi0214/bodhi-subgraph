@@ -33,6 +33,7 @@ export function handleCreate(event: CreateEvent): void {
   asset.assetId = event.params.assetId;
   asset.arTxId = event.params.arTxId;
   asset.creator = event.params.sender.toHexString();
+  asset.createdAt = event.block.timestamp;
   asset.totalSupply = BD_WAD;
   asset.save();
 }

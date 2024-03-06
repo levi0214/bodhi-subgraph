@@ -143,6 +143,7 @@ export function getOrCreateAsset(id: BigInt): Asset {
     asset.assetId = id;
     asset.arTxId = null;
     asset.creator = null;
+    asset.createdAt = BI_ZERO;
     asset.totalSupply = BD_ZERO;
     asset.totalTrades = BI_ZERO;
     asset.totalFees = BD_ZERO;

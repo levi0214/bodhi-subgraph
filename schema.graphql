@@ -69,6 +69,7 @@ type Asset @entity {
   assetId: BigInt!
   arTxId: String
   creator: User
+  createdAt: BigInt!
   totalSupply: BigDecimal!
   totalTrades: BigInt!
   totalFees: BigDecimal!
