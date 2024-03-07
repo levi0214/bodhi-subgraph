@@ -115,6 +115,7 @@ type Space @entity {
 
 type SpacePost @entity {
   id: ID! # asset id
+  assetId: BigInt! # for sorting (latest)
   spaceId: BigInt!
   asset: Asset!
   creator: User!

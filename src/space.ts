@@ -22,6 +22,7 @@ function newSpacePostCreateEvent(event: CreateEvent, space: Space, creator: User
 function newSpacePost(event: CreateEvent, space: Space, creator: User): void {
   const asset = getOrCreateAsset(event.params.assetId)
   let post = new SpacePost(event.params.assetId.toString())
+  post.assetId = event.params.assetId
   post.spaceId = space.spaceId  // changed to spaceId from space
   post.asset = asset.id
   post.creator = creator.id
