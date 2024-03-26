@@ -8,7 +8,7 @@ function newSpacePostCreateEvent(event: CreateEvent, space: Space, creator: User
     event.transaction.hash.concatI32(event.logIndex.toI32())
     )
 
-  postEvent.topicId = event.params.parentId
+  postEvent.parentId = event.params.parentId
   postEvent.assetId = event.params.assetId
   postEvent.creator = creator.id
   postEvent.space = space.id;
@@ -23,22 +23,36 @@ function newSpacePost(event: CreateEvent, space: Space, creator: User): void {
   const asset = getOrCreateAsset(event.params.assetId)
   let post = new SpacePost(event.params.assetId.toString())
   post.assetId = event.params.assetId
-  post.spaceId = space.spaceId  // changed to spaceId from space
+  post.spaceId = space.spaceId
   post.asset = asset.id
   post.creator = creator.id
-  post.isTopic = event.params.assetId == event.params.parentId
-  post.toTopic = event.params.parentId
+  
+  // post relation
+  post.isRoot = event.params.assetId == event.params.parentId
+  post.parentId = event.params.parentId
+  
+  if (post.isRoot) {
+    post.rootId = post.assetId
+    post.parent = null
+  } else {
+    let parentPost = SpacePost.load(event.params.parentId.toString())
+    if (parentPost == null) return
+    post.rootId = parentPost.rootId
+    post.parent = parentPost.id
+
+    parentPost.totalReplies = parentPost.totalReplies.plus(BI_ONE)
+    parentPost.save()
+    
+    if(!parentPost.isRoot){ 
+      let rootPost = SpacePost.load(parentPost.rootId.toString())
+      if (rootPost == null) return
+      rootPost.totalReplies = rootPost.totalReplies.plus(BI_ONE)
+      rootPost.save()
+    }
+  }
+
   post.totalReplies = BI_ZERO
   post.save()
-}
-
-function updateTotalReplies(event: CreateEvent): void {
-  if (event.params.assetId != event.params.parentId) {
-    let topic = SpacePost.load(event.params.parentId.toString())
-    if (topic == null) return
-    topic.totalReplies = topic.totalReplies.plus(BI_ONE)
-    topic.save()
-  }
 }
 
 export function handlePostCreate(event: CreateEvent): void {
@@ -50,7 +64,6 @@ export function handlePostCreate(event: CreateEvent): void {
   const creator = getOrCreateUser(event.params.sender)
   newSpacePostCreateEvent(event, space, creator)
   newSpacePost(event, space, creator)
-  updateTotalReplies(event)
 }
 
 // TODO handle post remove

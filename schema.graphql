@@ -98,7 +98,7 @@ type SpacePostCreateEvent @entity(immutable: true) {
   id: Bytes!
   space: Space!
   spaceId: BigInt! # uint256, for query
-  topicId: BigInt! # uint256
+  parentId: BigInt! # uint256
   assetId: BigInt! # uint256
   creator: User!
   blockNumber: BigInt!
@@ -123,7 +123,10 @@ type SpacePost @entity {
   spaceId: BigInt!
   asset: Asset!
   creator: User!
-  isTopic: Boolean! # isRoot
-  toTopic: BigInt! # parentId + rootId
+  isRoot: Boolean!
+  parentId: BigInt!
+  parent: SpacePost
+  rootId: BigInt!
   totalReplies: BigInt!
+  children: [SpacePost!]! @derivedFrom(field: "parent")
 }
