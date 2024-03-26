@@ -92,8 +92,6 @@ type SpaceCreateEvent @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-# TODO change topicId to rootId or parentId
-
 type SpacePostCreateEvent @entity(immutable: true) {
   id: Bytes!
   space: Space!
