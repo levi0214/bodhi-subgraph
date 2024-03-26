@@ -12,6 +12,7 @@ function newSpaceCreateEvent(event: CreateEvent): void {
   spaceCreateEvent.spaceAddress = event.params.spaceAddress
   spaceCreateEvent.assetId = event.params.assetId
   spaceCreateEvent.creator = event.params.creator
+  spaceCreateEvent.spaceName = event.params.spaceName
   spaceCreateEvent.blockNumber = event.block.number
   spaceCreateEvent.blockTimestamp = event.block.timestamp
   spaceCreateEvent.transactionHash = event.transaction.hash
@@ -32,6 +33,7 @@ function newSpace(event: CreateEvent): void {
   
   space.spaceId = event.params.spaceId
   space.spaceAddress = event.params.spaceAddress
+  space.spaceName = event.params.spaceName
   space.totalPosts = BI_ZERO
   space.save()
 }

@@ -86,10 +86,13 @@ type SpaceCreateEvent @entity(immutable: true) {
   spaceAddress: Bytes! # address
   assetId: BigInt! # uint256
   creator: Bytes! # address
+  spaceName: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
+# TODO change topicId to rootId or parentId
 
 type SpacePostCreateEvent @entity(immutable: true) {
   id: Bytes!
@@ -106,6 +109,7 @@ type SpacePostCreateEvent @entity(immutable: true) {
 type Space @entity {
   id: ID! # space contract address
   spaceId: BigInt!
+  spaceName: String!
   spaceAddress: Bytes! # address
   creator: User!
   asset: Asset!
@@ -119,7 +123,7 @@ type SpacePost @entity {
   spaceId: BigInt!
   asset: Asset!
   creator: User!
-  isTopic: Boolean!
-  toTopic: BigInt!
+  isTopic: Boolean! # isRoot
+  toTopic: BigInt! # parentId + rootId
   totalReplies: BigInt!
 }

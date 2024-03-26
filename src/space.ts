@@ -8,7 +8,7 @@ function newSpacePostCreateEvent(event: CreateEvent, space: Space, creator: User
     event.transaction.hash.concatI32(event.logIndex.toI32())
     )
 
-  postEvent.topicId = event.params.topicId
+  postEvent.topicId = event.params.parentId
   postEvent.assetId = event.params.assetId
   postEvent.creator = creator.id
   postEvent.space = space.id;
@@ -26,15 +26,15 @@ function newSpacePost(event: CreateEvent, space: Space, creator: User): void {
   post.spaceId = space.spaceId  // changed to spaceId from space
   post.asset = asset.id
   post.creator = creator.id
-  post.isTopic = event.params.assetId == event.params.topicId
-  post.toTopic = event.params.topicId
+  post.isTopic = event.params.assetId == event.params.parentId
+  post.toTopic = event.params.parentId
   post.totalReplies = BI_ZERO
   post.save()
 }
 
 function updateTotalReplies(event: CreateEvent): void {
-  if (event.params.assetId != event.params.topicId) {
-    let topic = SpacePost.load(event.params.topicId.toString())
+  if (event.params.assetId != event.params.parentId) {
+    let topic = SpacePost.load(event.params.parentId.toString())
     if (topic == null) return
     topic.totalReplies = topic.totalReplies.plus(BI_ONE)
     topic.save()

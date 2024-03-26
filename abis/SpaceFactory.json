@@ -25,6 +25,12 @@
         "internalType": "address",
         "name": "creator",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "spaceName",
+        "type": "string"
       }
     ],
     "name": "Create",
@@ -32,8 +38,16 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_bodhi", "type": "address" },
-      { "internalType": "uint256", "name": "_assetId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "assetId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "spaceName",
+        "type": "string"
+      }
     ],
     "name": "create",
     "outputs": [],
@@ -43,14 +57,32 @@
   {
     "inputs": [],
     "name": "spaceIndex",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "spaces",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   }

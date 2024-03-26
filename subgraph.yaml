@@ -34,7 +34,7 @@ dataSources:
     name: SpaceFactory
     network: mainnet  # need to change before deploy
     source:
-      address: "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690"
+      address: "0x5D42EBdBBa61412295D7b0302d6F50aC449Ddb4F"
       abi: SpaceFactory
       startBlock: 0  # need to change before deploy
     mapping:
@@ -47,7 +47,7 @@ dataSources:
         - name: SpaceFactory
           file: ./abis/SpaceFactory.json
       eventHandlers:
-        - event: Create(uint256,indexed address,indexed uint256,address)
+        - event: Create(uint256,indexed address,indexed uint256,address,string)
           handler: handleSpaceCreate
       file: ./src/space-factory.ts
 templates:
@@ -68,6 +68,6 @@ templates:
       eventHandlers:
         - event: Create(indexed uint256,indexed uint256,indexed address)
           handler: handlePostCreate
-        - event: Remove(indexed uint256,indexed address)
+        - event: Remove(indexed uint256)
           handler: handlePostRemove
       file: ./src/space.ts
