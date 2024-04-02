@@ -4,6 +4,7 @@ import {
 } from "../generated/templates/Space/Space";
 import {
   SpacePostCreateEvent,
+  SpacePostRemoveEvent,
   Space,
   SpacePost,
   User,
@@ -63,6 +64,7 @@ function newSpacePost(event: CreateEvent, space: Space, creator: User): void {
   post.creator = creator.id;
   post.parentId = event.params.parentId;
   post.totalReplies = BI_ZERO;
+  post.removedFromSpace = false;
   handleSpacePostRelation(event, post);
   post.save();
 }
@@ -78,5 +80,22 @@ export function handlePostCreate(event: CreateEvent): void {
   newSpacePost(event, space, creator);
 }
 
-// TODO handle post remove
-export function handlePostRemove(event: RemoveEvent): void {}
+export function handlePostRemove(event: RemoveEvent): void {
+  let postEvent = new SpacePostRemoveEvent(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  );
+  let space = Space.load(event.address.toHexString());
+  if (space == null) return;
+  postEvent.space = space.id;
+  postEvent.spaceId = space.spaceId;
+  postEvent.assetId = event.params.assetId;
+  postEvent.blockNumber = event.block.number;
+  postEvent.blockTimestamp = event.block.timestamp;
+  postEvent.transactionHash = event.transaction.hash;
+  postEvent.save();
+
+  let post = SpacePost.load(event.params.assetId.toString());
+  if (post == null) return;
+  post.removedFromSpace = true;
+  post.save();
+}

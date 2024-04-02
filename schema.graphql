@@ -104,6 +104,16 @@ type SpacePostCreateEvent @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
+type SpacePostRemoveEvent @entity(immutable: true) {
+  id: Bytes!
+  space: Space!
+  spaceId: BigInt! # uint256, for query
+  assetId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 type Space @entity {
   id: ID! # space contract address
   spaceId: BigInt!
@@ -126,5 +136,6 @@ type SpacePost @entity {
   parent: SpacePost
   rootId: BigInt!
   totalReplies: BigInt!
+  removedFromSpace: Boolean!
   children: [SpacePost!]! @derivedFrom(field: "parent")
 }
