@@ -76,6 +76,7 @@ type Asset @entity {
   totalVolume: BigDecimal!
   totalHolders: BigInt!
   removed: Boolean!
+  spacePost: SpacePost
   holders: [UserAsset!]! @derivedFrom(field: "asset")
 }
 
@@ -116,7 +117,7 @@ type SpacePostRemoveEvent @entity(immutable: true) {
 
 type Space @entity {
   id: ID! # space contract address
-  spaceId: BigInt!
+  spaceId: BigInt! # can be used for sorting
   spaceName: String!
   spaceAddress: Bytes! # address
   creator: User!

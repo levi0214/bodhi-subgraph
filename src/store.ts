@@ -150,6 +150,7 @@ export function getOrCreateAsset(id: BigInt): Asset {
     asset.totalVolume = BD_ZERO;
     asset.totalHolders = BI_ZERO;
     asset.removed = false;
+    asset.spacePost = null;
     asset.save();
   }
   return asset;

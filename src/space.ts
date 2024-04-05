@@ -67,6 +67,9 @@ function newSpacePost(event: CreateEvent, space: Space, creator: User): void {
   post.removedFromSpace = false;
   handleSpacePostRelation(event, post);
   post.save();
+
+  asset.spacePost = post.id;
+  asset.save();
 }
 
 export function handlePostCreate(event: CreateEvent): void {
