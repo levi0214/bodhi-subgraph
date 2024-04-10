@@ -35,6 +35,11 @@ export function handleCreate(event: CreateEvent): void {
   asset.creator = event.params.sender.toHexString();
   asset.createdAt = event.block.timestamp;
   asset.totalSupply = BD_WAD;
+
+  if (!asset.realCreator) {
+    asset.realCreator = event.params.sender;
+  }
+
   asset.save();
 }
 

@@ -69,6 +69,7 @@ function newSpacePost(event: CreateEvent, space: Space, creator: User): void {
   post.save();
 
   asset.spacePost = post.id;
+  asset.realCreator = event.params.sender;
   asset.save();
 }
 

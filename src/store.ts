@@ -151,6 +151,7 @@ export function getOrCreateAsset(id: BigInt): Asset {
     asset.totalHolders = BI_ZERO;
     asset.removed = false;
     asset.spacePost = null;
+    asset.realCreator = null;
     asset.save();
   }
   return asset;

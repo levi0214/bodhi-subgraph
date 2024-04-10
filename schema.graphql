@@ -68,7 +68,7 @@ type Asset @entity {
   id: ID!
   assetId: BigInt!
   arTxId: String
-  creator: User
+  creator: User # who created the asset (in Bodhi)
   createdAt: BigInt!
   totalSupply: BigDecimal!
   totalTrades: BigInt!
@@ -77,6 +77,7 @@ type Asset @entity {
   totalHolders: BigInt!
   removed: Boolean!
   spacePost: SpacePost
+  realCreator: Bytes # who is real author of content (in apps)
   holders: [UserAsset!]! @derivedFrom(field: "asset")
 }
 
