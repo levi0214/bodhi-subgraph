@@ -34,7 +34,7 @@ dataSources:
     name: SpaceFactory
     network: mainnet  # need to change before deploy
     source:
-      address: "0x5D42EBdBBa61412295D7b0302d6F50aC449Ddb4F"
+      address: "0x67aD6EA566BA6B0fC52e97Bc25CE46120fdAc04c"
       abi: SpaceFactory
       startBlock: 0  # need to change before deploy
     mapping:
