@@ -81,6 +81,18 @@ type Asset @entity {
   holders: [UserAsset!]! @derivedFrom(field: "asset")
 }
 
+# Bodhi Trade Helper
+type SafeBuy @entity(immutable: true) {
+  id: Bytes!
+  assetId: BigInt! # uint256
+  sender: Bytes!
+  tokenAmount: BigDecimal!
+  ethAmount: BigDecimal!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 # Space
 type SpaceCreateEvent @entity(immutable: true) {
   id: Bytes!
