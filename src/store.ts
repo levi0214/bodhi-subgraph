@@ -6,6 +6,7 @@ import {
   User,
   Asset,
   UserAsset,
+  ProxyTrade,
 } from "../generated/schema";
 import {
   Create as CreateEvent,
@@ -68,6 +69,15 @@ export function newTrade(event: TradeEvent, user: User, asset: Asset): void {
     entity.price = entity.ethAmount.div(entity.tokenAmount);
   } else {
     entity.price = BD_ZERO;
+  }
+
+  const proxyTrade = ProxyTrade.load(event.transaction.hash);
+  if (proxyTrade) {
+    entity.proxy = proxyTrade.proxy;
+    entity.realSender = proxyTrade.realSender;
+  } else {
+    entity.proxy = ProxyType.NONE;
+    entity.realSender = null;
   }
 
   entity.blockNumber = event.block.number;
@@ -184,4 +194,25 @@ export function getOrCreateUserAsset(user: User, asset: Asset): UserAsset {
     userAsset.save();
   }
   return userAsset;
+}
+
+export enum ProxyType {
+  NONE,
+  SPACE_POST_CREATE,
+  HELPER_SAFE_BUY,
+}
+
+export function getOrCreateProxyTrade(
+  txHash: Bytes,
+  sender: Bytes,
+  proxy: i32
+): ProxyTrade {
+  let proxyTrade = ProxyTrade.load(txHash);
+  if (proxyTrade == null) {
+    proxyTrade = new ProxyTrade(txHash);
+    proxyTrade.realSender = sender;
+    proxyTrade.proxy = proxy;
+    proxyTrade.save();
+  }
+  return proxyTrade;
 }

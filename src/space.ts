@@ -9,7 +9,12 @@ import {
   SpacePost,
   User,
 } from "../generated/schema";
-import { getOrCreateUser, getOrCreateAsset } from "./store";
+import {
+  ProxyType,
+  getOrCreateProxyTrade, 
+  getOrCreateUser,
+  getOrCreateAsset,
+} from "./store";
 import { BI_ZERO, BI_ONE } from "./number";
 
 function newSpacePostCreateEvent(
@@ -82,6 +87,11 @@ export function handlePostCreate(event: CreateEvent): void {
   const creator = getOrCreateUser(event.params.sender);
   newSpacePostCreateEvent(event, space, creator);
   newSpacePost(event, space, creator);
+  getOrCreateProxyTrade(
+    event.transaction.hash,
+    event.params.sender,
+    ProxyType.SPACE_POST_CREATE
+  )
 }
 
 export function handlePostRemove(event: RemoveEvent): void {

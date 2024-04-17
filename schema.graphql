@@ -28,6 +28,8 @@ type Trade @entity(immutable: true) {
   ethAmount: BigDecimal!
   creatorFee: BigDecimal!
   price: BigDecimal!
+  realSender: Bytes # address
+  proxy: Int! # uint8 (0: none, 1: space.create, 2: helper.safeBuy)
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -91,6 +93,12 @@ type SafeBuy @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+}
+
+type ProxyTrade @entity {
+  id: Bytes! # tx hash
+  realSender: Bytes! # address
+  proxy: Int! # uint8 (0 none, 1 space.create, 2 helper.safeBuy)
 }
 
 # Space
