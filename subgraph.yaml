@@ -34,7 +34,7 @@ dataSources:
     name: SpaceFactory
     network: mainnet  # need to change before deploy
     source:
-      address: "0x67aD6EA566BA6B0fC52e97Bc25CE46120fdAc04c"
+      address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
       abi: SpaceFactory
       startBlock: 0  # need to change before deploy
     mapping:
@@ -54,7 +54,7 @@ dataSources:
     name: BodhiTradeHelper
     network: mainnet  # need to change before deploy
     source:
-      address: "0x6A59CC73e334b018C9922793d96Df84B538E6fD5"
+      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
       abi: BodhiTradeHelper
       startBlock: 0  # need to change before deploy
     mapping:
