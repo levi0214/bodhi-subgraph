@@ -84,11 +84,13 @@ export function handleTrade(event: TradeEvent): void {
     // traderAsset.amount is updated before this handle function (in handleTransfer)
     // newCost = ((updatedAmount - deltaAmount) * avgPriceBefore + cost)
     // newAvgPrice = newCost / updatedAmount
-    traderAsset.avgPrice = traderAsset.amount
-      .minus(deltaAmount)
-      .times(traderAsset.avgPrice)
-      .plus(ethAmount)
-      .div(traderAsset.amount);
+    if (!deltaAmount.equals(BD_ZERO)) {
+      traderAsset.avgPrice = traderAsset.amount
+        .minus(deltaAmount)
+        .times(traderAsset.avgPrice)
+        .plus(ethAmount)
+        .div(traderAsset.amount);
+    }
     traderAsset.save();
   } else {
     // sell
