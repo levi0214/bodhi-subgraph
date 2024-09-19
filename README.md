@@ -2,41 +2,43 @@
 
 This subgraph indexes data from the Bodhi protocol and official apps.
 
-## Getting Started
+## Setup
 
 1. Install dependencies:
+   ```bash
+   yarn install
+   ```
 
-    ```bash
-    yarn install
-    ```
-
-2. Copy configuration files:
-
-    ```bash
-    cp networks.json.example networks.json
-    cp subgraph.yaml.example subgraph.yaml
-    ```
+2. Copy config files:
+   ```bash
+   cp networks.json.example networks.json
+   cp subgraph.yaml.example subgraph.yaml
+   ```
 
 3. Generate code:
+   ```bash
+   yarn codegen
+   ```
 
-    ```bash
-    yarn codegen
-    ```
-
-## Deploying the Subgraph
+## Deployment
 
 ### Optimism Network
 
-To deploy on the Optimism network, run:
+1. Build the subgraph:
+   ```bash
+   yarn build:op
+   ```
 
-```bash
-yarn build:op
-yarn deploy
-```
+2. Deploy to The Graph Studio:
+   
+   Visit [The Graph Studio](https://thegraph.com/studio/) to get your API key and studio name, then:
+   ```bash
+   graph deploy --studio YOUR_STUDIO_NAME
+   ```
 
 ### Local Network
 
-For local network development (e.g., Anvil or Hardhat node), run:
+For local network development (e.g., Anvil or Hardhat node):
 
 ```bash
 yarn build:local
