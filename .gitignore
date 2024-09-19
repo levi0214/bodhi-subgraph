@@ -111,3 +111,7 @@ generated/
 
 # webstorm
 .idea
+
+# handle different networks
+networks.json
+subgraph.yaml

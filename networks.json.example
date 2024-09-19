@@ -1,0 +1,30 @@
+{
+  "optimism": {
+    "Bodhi": {
+      "address": "0x2AD82A4E39Bac43A54DdfE6f94980AAf0D1409eF",
+      "startBlock": 113209482
+    },
+    "SpaceFactory": {
+      "address": "0xA14D19387C83b56343fC2E7a8707986aF6a74d08",
+      "startBlock": 119048371
+    },
+    "BodhiTradeHelper": {
+      "address": "0x59301bb28884b477dEc0F238c60650b60a691Eb9",
+      "startBlock": 119048281
+    }
+  },
+  "mainnet": {
+    "Bodhi": {
+      "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "startBlock": 0
+    },
+    "SpaceFactory": {
+      "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      "startBlock": 0
+    },
+    "BodhiTradeHelper": {
+      "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      "startBlock": 0
+    }
+  }
+}
