@@ -1,4 +1,7 @@
-# Bodhi
+# ===============================
+#           Bodhi (Core)
+# ===============================
+
 type Create @entity(immutable: true) {
   id: Bytes!
   assetId: BigInt! # uint256
@@ -83,7 +86,10 @@ type Asset @entity {
   holders: [UserAsset!]! @derivedFrom(field: "asset")
 }
 
-# Bodhi Trade Helper
+# ===============================
+#           Bodhi Trade Helper
+# ===============================
+
 type SafeBuy @entity(immutable: true) {
   id: Bytes!
   assetId: BigInt! # uint256
@@ -101,7 +107,10 @@ type ProxyTrade @entity {
   proxy: Int! # uint8 (0 none, 1 space.create, 2 helper.safeBuy)
 }
 
-# Space
+# ===============================
+#           Space (App)
+# ===============================
+
 type SpaceCreateEvent @entity(immutable: true) {
   id: Bytes!
   spaceId: BigInt! # uint256
@@ -160,4 +169,60 @@ type SpacePost @entity {
   totalReplies: BigInt!
   removedFromSpace: Boolean!
   children: [SpacePost!]! @derivedFrom(field: "parent")
+}
+
+# ===============================
+#           Wishpool4 (App)
+# ===============================
+
+type Pool @entity {
+  id: ID!
+  asset: Asset!
+  creator: Bytes!
+  solver: Bytes
+  completed: Boolean!
+  solutions: [Solution!]! @derivedFrom(field: "pool")
+  createdAt: BigInt!
+  completedAt: BigInt
+  completedSolution: Solution
+}
+
+type Solution @entity {
+  id: ID!
+  pool: Pool!
+  solver: Bytes!
+  asset: Asset!
+  submittedAt: BigInt!
+}
+
+type PoolCreateEvent @entity(immutable: true) {
+  id: Bytes!
+  poolId: BigInt!
+  creator: Bytes!
+  solver: Bytes!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type SubmitSolutionEvent @entity(immutable: true) {
+  id: Bytes!
+  poolId: BigInt!
+  solver: Bytes!
+  solutionId: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type PoolCompleteEvent @entity(immutable: true) {
+  id: Bytes!
+  poolId: BigInt!
+  solver: Bytes!
+  solutionId: BigInt!
+  tokenAmount: BigInt!
+  ethAmount: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
