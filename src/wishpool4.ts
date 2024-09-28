@@ -4,6 +4,7 @@ import {
   Complete as CompleteEvent
 } from "../generated/Wishpool4/Wishpool4"
 import { Pool, Solution, Asset, PoolCreateEvent, SubmitSolutionEvent as SubmitSolutionEventEntity, PoolCompleteEvent } from "../generated/schema"
+import { fromWei } from "./number"
 
 export function handleCreate(event: CreateEvent): void {
   let pool = new Pool(event.params.poolId.toString())
@@ -49,6 +50,7 @@ export function handleComplete(event: CompleteEvent): void {
     pool.solver = event.params.solver
     pool.completedAt = event.block.timestamp
     pool.completedSolution = event.params.solutionId.toString()
+    pool.ethAmount = fromWei(event.params.ethAmount);
     pool.save()
   }
 
@@ -56,8 +58,8 @@ export function handleComplete(event: CompleteEvent): void {
   completeEvent.poolId = event.params.poolId
   completeEvent.solver = event.params.solver
   completeEvent.solutionId = event.params.solutionId
-  completeEvent.tokenAmount = event.params.tokenAmount
-  completeEvent.ethAmount = event.params.ethAmount
+  completeEvent.tokenAmount = fromWei(event.params.tokenAmount);
+  completeEvent.ethAmount = fromWei(event.params.ethAmount);
   completeEvent.blockNumber = event.block.number
   completeEvent.blockTimestamp = event.block.timestamp
   completeEvent.transactionHash = event.transaction.hash

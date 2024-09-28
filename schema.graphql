@@ -185,6 +185,7 @@ type Pool @entity {
   createdAt: BigInt!
   completedAt: BigInt
   completedSolution: Solution
+  ethAmount: BigDecimal
 }
 
 type Solution @entity {
@@ -220,8 +221,8 @@ type PoolCompleteEvent @entity(immutable: true) {
   poolId: BigInt!
   solver: Bytes!
   solutionId: BigInt!
-  tokenAmount: BigInt!
-  ethAmount: BigInt!
+  tokenAmount: BigDecimal!
+  ethAmount: BigDecimal!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
