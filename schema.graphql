@@ -172,33 +172,33 @@ type SpacePost @entity {
 }
 
 # ===============================
-#           Wishpool4 (App)
+#           Wishpool5 (App)
 # ===============================
 
-type Pool @entity {
+type Mission @entity {
   id: ID!
   asset: Asset!
   creator: Bytes!
   solver: Bytes
   completed: Boolean!
-  solutions: [Solution!]! @derivedFrom(field: "pool")
+  submissions: [Submission!]! @derivedFrom(field: "mission")
   createdAt: BigInt!
   completedAt: BigInt
-  completedSolution: Solution
+  completedSubmission: Submission
   ethAmount: BigDecimal
 }
 
-type Solution @entity {
+type Submission @entity {
   id: ID!
-  pool: Pool!
+  mission: Mission!
   solver: Bytes!
   asset: Asset!
   submittedAt: BigInt!
 }
 
-type PoolCreateEvent @entity(immutable: true) {
+type MissionCreateEvent @entity(immutable: true) {
   id: Bytes!
-  poolId: BigInt!
+  missionId: BigInt!
   creator: Bytes!
   solver: Bytes!
   blockNumber: BigInt!
@@ -206,21 +206,21 @@ type PoolCreateEvent @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type SubmitSolutionEvent @entity(immutable: true) {
+type CreateSubmissionEvent @entity(immutable: true) {
   id: Bytes!
-  poolId: BigInt!
+  missionId: BigInt!
   solver: Bytes!
-  solutionId: BigInt!
+  submissionId: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type PoolCompleteEvent @entity(immutable: true) {
+type MissionCompleteEvent @entity(immutable: true) {
   id: Bytes!
-  poolId: BigInt!
+  missionId: BigInt!
   solver: Bytes!
-  solutionId: BigInt!
+  submissionId: BigInt!
   tokenAmount: BigDecimal!
   ethAmount: BigDecimal!
   blockNumber: BigInt!

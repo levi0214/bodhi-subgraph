@@ -29,15 +29,15 @@
   },
   {
     "type": "function",
-    "name": "complete",
+    "name": "completeMission",
     "inputs": [
       {
-        "name": "poolId",
+        "name": "missionId",
         "type": "uint256",
         "internalType": "uint256"
       },
       {
-        "name": "solutionId",
+        "name": "submissionId",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -47,7 +47,7 @@
   },
   {
     "type": "function",
-    "name": "createPool",
+    "name": "createMission",
     "inputs": [
       {
         "name": "arTxId",
@@ -62,6 +62,58 @@
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "createSubmission",
+    "inputs": [
+      {
+        "name": "missionId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "arTxId",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "missions",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "creator",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "solver",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "completed",
+        "type": "bool",
+        "internalType": "bool"
+      },
+      {
+        "name": "submission",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -143,7 +195,7 @@
   },
   {
     "type": "function",
-    "name": "pools",
+    "name": "submissionToCreator",
     "inputs": [
       {
         "name": "",
@@ -153,26 +205,16 @@
     ],
     "outputs": [
       {
-        "name": "creator",
+        "name": "",
         "type": "address",
         "internalType": "address"
-      },
-      {
-        "name": "solver",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "completed",
-        "type": "bool",
-        "internalType": "bool"
       }
     ],
     "stateMutability": "view"
   },
   {
     "type": "function",
-    "name": "solutionToPool",
+    "name": "submissionToMission",
     "inputs": [
       {
         "name": "",
@@ -188,31 +230,13 @@
       }
     ],
     "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "submitSolution",
-    "inputs": [
-      {
-        "name": "poolId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "solutionId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
   },
   {
     "type": "event",
-    "name": "Complete",
+    "name": "CompleteMission",
     "inputs": [
       {
-        "name": "poolId",
+        "name": "missionId",
         "type": "uint256",
         "indexed": true,
         "internalType": "uint256"
@@ -224,7 +248,7 @@
         "internalType": "address"
       },
       {
-        "name": "solutionId",
+        "name": "submissionId",
         "type": "uint256",
         "indexed": true,
         "internalType": "uint256"
@@ -246,10 +270,10 @@
   },
   {
     "type": "event",
-    "name": "Create",
+    "name": "CreateMission",
     "inputs": [
       {
-        "name": "poolId",
+        "name": "missionId",
         "type": "uint256",
         "indexed": true,
         "internalType": "uint256"
@@ -271,10 +295,10 @@
   },
   {
     "type": "event",
-    "name": "SubmitSolution",
+    "name": "CreateSubmission",
     "inputs": [
       {
-        "name": "poolId",
+        "name": "missionId",
         "type": "uint256",
         "indexed": true,
         "internalType": "uint256"
@@ -286,12 +310,32 @@
         "internalType": "address"
       },
       {
-        "name": "solutionId",
+        "name": "submissionId",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
       }
     ],
     "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "EtherTransferFailed",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidMission",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidSubmission",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "Unauthorized",
+    "inputs": []
   }
 ]
