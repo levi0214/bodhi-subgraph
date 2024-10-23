@@ -172,33 +172,35 @@ type SpacePost @entity {
 }
 
 # ===============================
-#           Wishpool5 (App)
+#           Wishpool6 (App)
 # ===============================
 
-type Mission @entity {
+type Wish @entity {
   id: ID!
   asset: Asset!
   creator: Bytes!
   solver: Bytes
-  completed: Boolean!
-  submissions: [Submission!]! @derivedFrom(field: "mission")
+  isOpen: Boolean!
+  responses: [Response!]! @derivedFrom(field: "wish")
   createdAt: BigInt!
-  completedAt: BigInt
-  completedSubmission: Submission
+  closedAt: BigInt
+  selectedResponse: Response
   ethAmount: BigDecimal
+  tokenAmount: BigDecimal
 }
 
-type Submission @entity {
+type Response @entity {
   id: ID!
-  mission: Mission!
-  solver: Bytes!
+  wish: Wish!
+  creator: Bytes!
   asset: Asset!
   submittedAt: BigInt!
+  isRewarded: Boolean!
 }
 
-type MissionCreateEvent @entity(immutable: true) {
+type CreateWishEvent @entity(immutable: true) {
   id: Bytes!
-  missionId: BigInt!
+  wishId: BigInt!
   creator: Bytes!
   solver: Bytes!
   blockNumber: BigInt!
@@ -206,21 +208,21 @@ type MissionCreateEvent @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type CreateSubmissionEvent @entity(immutable: true) {
+type CreateResponseEvent @entity(immutable: true) {
   id: Bytes!
-  missionId: BigInt!
+  wishId: BigInt!
   solver: Bytes!
-  submissionId: BigInt!
+  responseId: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type MissionCompleteEvent @entity(immutable: true) {
+type CloseWishEvent @entity(immutable: true) {
   id: Bytes!
-  missionId: BigInt!
+  wishId: BigInt!
   solver: Bytes!
-  submissionId: BigInt!
+  responseId: BigInt!
   tokenAmount: BigDecimal!
   ethAmount: BigDecimal!
   blockNumber: BigInt!
