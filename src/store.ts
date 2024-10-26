@@ -89,9 +89,10 @@ export function newTrade(event: TradeEvent, user: User, asset: Asset): void {
 
 export function newTransferFromSingle(event: TransferSingleEvent): void {
   // skip mint & burn
+  // TODO skip trade proxy
   if (
-    event.params.from.toHexString() != ADDRESS_ZERO &&
-    event.params.to.toHexString() != ADDRESS_ZERO
+    event.params.from.toHexString() == ADDRESS_ZERO ||
+    event.params.to.toHexString() == ADDRESS_ZERO
   ) {
     return;
   }
@@ -121,8 +122,8 @@ export function newTransferFromBatch(
 ): void {
   // skip mint & burn
   if (
-    event.params.from.toHexString() != ADDRESS_ZERO &&
-    event.params.to.toHexString() != ADDRESS_ZERO
+    event.params.from.toHexString() == ADDRESS_ZERO ||
+    event.params.to.toHexString() == ADDRESS_ZERO
   ) {
     return;
   }
