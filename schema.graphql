@@ -197,35 +197,3 @@ type Response @entity {
   submittedAt: BigInt!
   isRewarded: Boolean!
 }
-
-type CreateWishEvent @entity(immutable: true) {
-  id: Bytes!
-  wishId: BigInt!
-  creator: Bytes!
-  solver: Bytes!
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CreateResponseEvent @entity(immutable: true) {
-  id: Bytes!
-  wishId: BigInt!
-  solver: Bytes!
-  responseId: BigInt!
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CloseWishEvent @entity(immutable: true) {
-  id: Bytes!
-  wishId: BigInt!
-  solver: Bytes!
-  responseId: BigInt!
-  tokenAmount: BigDecimal!
-  ethAmount: BigDecimal!
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
