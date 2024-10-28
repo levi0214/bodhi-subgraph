@@ -84,6 +84,7 @@ type Asset @entity {
   spacePost: SpacePost
   realCreator: Bytes # who is real author of content (in apps)
   holders: [UserAsset!]! @derivedFrom(field: "asset")
+  lastTradeDirection: Int! # 1 for up/buy, -1 for down/sell, 0 for initial
 }
 
 # ===============================

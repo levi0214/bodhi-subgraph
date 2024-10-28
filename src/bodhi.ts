@@ -81,6 +81,7 @@ export function handleTrade(event: TradeEvent): void {
   if (event.params.tradeType == 1) {
     // buy
     asset.totalSupply = asset.totalSupply.plus(deltaAmount);
+    asset.lastTradeDirection = 1;  // Buy, price goes up
     // traderAsset.amount is updated before this handle function (in handleTransfer)
     // newCost = ((updatedAmount - deltaAmount) * avgPriceBefore + cost)
     // newAvgPrice = newCost / updatedAmount
@@ -95,6 +96,7 @@ export function handleTrade(event: TradeEvent): void {
   } else {
     // sell
     asset.totalSupply = asset.totalSupply.minus(deltaAmount);
+    asset.lastTradeDirection = -1;  // Sell, price goes down
     const cost = deltaAmount.times(traderAsset.avgPrice);
     trader.tradingPnl = trader.tradingPnl.plus(
       ethAmount.minus(cost)

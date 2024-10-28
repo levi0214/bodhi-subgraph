@@ -163,6 +163,7 @@ export function getOrCreateAsset(id: BigInt): Asset {
     asset.removed = false;
     asset.spacePost = null;
     asset.realCreator = null;
+    asset.lastTradeDirection = 0;
     asset.save();
   }
   return asset;
