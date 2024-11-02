@@ -33,6 +33,7 @@ type Trade @entity(immutable: true) {
   price: BigDecimal!
   realSender: Bytes # address
   proxy: Int! # uint8 (0: none, 1: space.create, 2: helper.safeBuy)
+  supplyAfterTrade: BigDecimal!  # total supply after this trade
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!

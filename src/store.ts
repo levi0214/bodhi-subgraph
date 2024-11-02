@@ -65,6 +65,15 @@ export function newTrade(event: TradeEvent, user: User, asset: Asset): void {
   entity.ethAmount = fromWei(event.params.ethAmount);
   entity.creatorFee = fromWei(event.params.creatorFee);
 
+  const deltaAmount = fromWei(event.params.tokenAmount);
+  if (event.params.tradeType == 0) {
+    entity.supplyAfterTrade = deltaAmount;
+  } else if (event.params.tradeType == 1) {
+    entity.supplyAfterTrade = asset.totalSupply.plus(deltaAmount);
+  } else {
+    entity.supplyAfterTrade = asset.totalSupply.minus(deltaAmount);
+  }
+
   if (entity.tokenAmount.gt(BD_ZERO)) {
     entity.price = entity.ethAmount.div(entity.tokenAmount);
   } else {
