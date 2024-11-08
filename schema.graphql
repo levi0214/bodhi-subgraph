@@ -2,6 +2,20 @@
 #           Core Entities
 # ===============================
 
+enum AppSource {
+    BODHI           # fundamental protocol assets
+    SPACE           # space app assets
+    WISHPOOL        # wishpool app assets
+}
+
+enum AssetType {
+    ORIGINAL        # original Bodhi assets
+    SPACE           # space contract
+    SPACE_POST      # post in space
+    WISH            # wishpool wish
+    RESPONSE        # wishpool response
+}
+
 type Asset @entity {
     # Identity
     id: ID!
@@ -12,10 +26,14 @@ type Asset @entity {
     creator: User             # who created the asset (in Bodhi)
     realCreator: Bytes        # who is real author of content (in apps)
     createdAt: BigInt!
-    
+
     # State
     removed: Boolean!
     lastTradeDirection: Int!  # 1 for up/buy, -1 for down/sell, 0 for initial
+    
+    # App and Asset Type
+    app: AppSource!
+    assetType: AssetType!
     
     # Statistics
     totalSupply: BigDecimal!

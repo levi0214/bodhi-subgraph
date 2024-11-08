@@ -3,11 +3,16 @@ import { Space } from "../generated/schema"
 import { getOrCreateAsset, getOrCreateUser } from "./store"
 import { Space as SpaceContract } from '../generated/templates'
 import { BI_ZERO } from "./number"
+import { AppSource, AssetType } from './types'
 
 function newSpace(event: CreateEvent): void {
   let space = new Space(event.params.spaceAddress.toHexString())
   
   const asset = getOrCreateAsset(event.params.assetId)
+  asset.app = AppSource.SPACE
+  asset.assetType = AssetType.SPACE
+  asset.save()
+  
   space.asset = asset.id
   
   const creator = getOrCreateUser(event.params.creator)

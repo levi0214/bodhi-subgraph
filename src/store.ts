@@ -17,6 +17,7 @@ import {
 } from "../generated/Bodhi/Bodhi";
 import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { ADDRESS_ZERO, BD_ZERO, BI_ZERO, fromWei } from "./number";
+import { AppSource, AssetType } from './types'
 
 export function newCreate(event: CreateEvent): void {
   let create = new Create(
@@ -173,6 +174,8 @@ export function getOrCreateAsset(id: BigInt): Asset {
     asset.spacePost = null;
     asset.realCreator = null;
     asset.lastTradeDirection = 0;
+    asset.app = AppSource.BODHI;
+    asset.assetType = AssetType.ORIGINAL;
     asset.save();
   }
   return asset;

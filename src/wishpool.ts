@@ -5,10 +5,17 @@ import {
 } from "../generated/Wishpool6/Wishpool6";
 import { Wish, Response } from "../generated/schema";
 import { fromWei } from "./number";
+import { getOrCreateAsset } from "./store";
+import { AppSource, AssetType } from './types'
 
 export function handleCreateWish(event: CreateWishEvent): void {
   let wishId = event.params.wishId.toString();
   let wish = new Wish(wishId);
+
+  const asset = getOrCreateAsset(event.params.wishId);
+  asset.app = AppSource.WISHPOOL;
+  asset.assetType = AssetType.WISH;
+  asset.save();
 
   wish.asset = wishId;
   wish.creator = event.params.creator;
@@ -20,6 +27,12 @@ export function handleCreateWish(event: CreateWishEvent): void {
 
 export function handleCreateResponse(event: CreateResponseEvent): void {
   let responseId = event.params.responseId.toString();
+  
+  const asset = getOrCreateAsset(event.params.responseId);
+  asset.app = AppSource.WISHPOOL;
+  asset.assetType = AssetType.RESPONSE;
+  asset.save();
+  
   let response = new Response(responseId);
 
   response.wish = event.params.wishId.toString();

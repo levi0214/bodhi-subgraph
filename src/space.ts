@@ -10,6 +10,7 @@ import {
   getOrCreateAsset,
 } from "./store";
 import { BI_ZERO, BI_ONE } from "./number";
+import { AppSource, AssetType } from './types'
 
 function handleSpacePostRelation(event: CreateEvent, post: SpacePost): void {
   post.isRoot = event.params.assetId == event.params.parentId;
@@ -36,6 +37,7 @@ function updateTotalReplies(post: SpacePost): void {
 
 function newSpacePost(event: CreateEvent, space: Space, creator: User): void {
   const asset = getOrCreateAsset(event.params.assetId);
+  
   let post = new SpacePost(event.params.assetId.toString());
   post.assetId = event.params.assetId;
   post.spaceId = space.spaceId;
@@ -49,6 +51,8 @@ function newSpacePost(event: CreateEvent, space: Space, creator: User): void {
 
   asset.spacePost = post.id;
   asset.realCreator = event.params.sender;
+  asset.app = AppSource.SPACE;
+  asset.assetType = AssetType.SPACE_POST;
   asset.save();
 }
 
