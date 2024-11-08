@@ -113,40 +113,6 @@ type ProxyTrade @entity {
 #           Space (App)
 # ===============================
 
-type SpaceCreateEvent @entity(immutable: true) {
-  id: Bytes!
-  spaceId: BigInt! # uint256
-  spaceAddress: Bytes! # address
-  assetId: BigInt! # uint256
-  creator: Bytes! # address
-  spaceName: String!
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SpacePostCreateEvent @entity(immutable: true) {
-  id: Bytes!
-  space: Space!
-  spaceId: BigInt! # uint256, for query
-  parentId: BigInt! # uint256
-  assetId: BigInt! # uint256
-  creator: User!
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SpacePostRemoveEvent @entity(immutable: true) {
-  id: Bytes!
-  space: Space!
-  spaceId: BigInt! # uint256, for query
-  assetId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
 type Space @entity {
   id: ID! # space contract address
   spaceId: BigInt! # can be used for sorting

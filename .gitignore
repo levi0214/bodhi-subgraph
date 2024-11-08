@@ -115,3 +115,5 @@ generated/
 # handle different networks
 networks.json
 subgraph.yaml
+
+instructions/
