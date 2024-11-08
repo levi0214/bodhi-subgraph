@@ -1,167 +1,243 @@
 # ===============================
-#           Bodhi (Core)
+#           Core Entities
 # ===============================
 
-type Create @entity(immutable: true) {
-  id: Bytes!
-  assetId: BigInt! # uint256
-  sender: Bytes! # address
-  arTxId: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Remove @entity(immutable: true) {
-  id: Bytes!
-  assetId: BigInt! # uint256
-  sender: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Trade @entity(immutable: true) {
-  id: Bytes!
-  tradeType: Int! # uint8
-  assetId: BigInt! # uint256
-  asset: Asset!
-  user: User! # address
-  tokenAmount: BigDecimal!
-  ethAmount: BigDecimal!
-  creatorFee: BigDecimal!
-  price: BigDecimal!
-  realSender: Bytes # address
-  proxy: Int! # uint8 (0: none, 1: space.create, 2: helper.safeBuy)
-  supplyAfterTrade: BigDecimal!  # total supply after this trade
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Transfer @entity(immutable: true) {
-  id: Bytes!
-  operator: Bytes! # address
-  from: Bytes! # address
-  to: Bytes! # address
-  assetId: BigInt! # uint256
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type Asset @entity {
+    # Identity
+    id: ID!
+    assetId: BigInt!
+    arTxId: String
+    
+    # Creator Info
+    creator: User             # who created the asset (in Bodhi)
+    realCreator: Bytes        # who is real author of content (in apps)
+    createdAt: BigInt!
+    
+    # State
+    removed: Boolean!
+    lastTradeDirection: Int!  # 1 for up/buy, -1 for down/sell, 0 for initial
+    
+    # Statistics
+    totalSupply: BigDecimal!
+    totalTrades: BigInt!
+    totalFees: BigDecimal!
+    totalVolume: BigDecimal!
+    totalHolders: BigInt!
+    
+    # Relations
+    spacePost: SpacePost
+    holders: [UserAsset!]! @derivedFrom(field: "asset")
 }
 
 type User @entity {
-  id: ID!
-  address: Bytes! # address
-  creatorProfit: BigDecimal!
-  tradingPnl: BigDecimal!
-  totalTrades: BigInt!
-  assets: [UserAsset!]! @derivedFrom(field: "user")
-  trades: [Trade!]! @derivedFrom(field: "user")
+    # Identity
+    id: ID!
+    address: Bytes!           # address
+    
+    # Statistics
+    creatorProfit: BigDecimal!
+    tradingPnl: BigDecimal!
+    totalTrades: BigInt!
+    
+    # Relations
+    assets: [UserAsset!]! @derivedFrom(field: "user")
+    trades: [Trade!]! @derivedFrom(field: "user")
 }
 
 type UserAsset @entity {
-  id: ID! # `user.id.concat(asset.id)`
-  assetId: BigInt!
-  user: User!
-  asset: Asset!
-  amount: BigDecimal!
-  avgPrice: BigDecimal!
-}
-
-type Asset @entity {
-  id: ID!
-  assetId: BigInt!
-  arTxId: String
-  creator: User # who created the asset (in Bodhi)
-  createdAt: BigInt!
-  totalSupply: BigDecimal!
-  totalTrades: BigInt!
-  totalFees: BigDecimal!
-  totalVolume: BigDecimal!
-  totalHolders: BigInt!
-  removed: Boolean!
-  spacePost: SpacePost
-  realCreator: Bytes # who is real author of content (in apps)
-  holders: [UserAsset!]! @derivedFrom(field: "asset")
-  lastTradeDirection: Int! # 1 for up/buy, -1 for down/sell, 0 for initial
+    # Identity
+    id: ID!                   # `user.id.concat(asset.id)`
+    assetId: BigInt!
+    
+    # Position Info
+    amount: BigDecimal!
+    avgPrice: BigDecimal!
+    
+    # Relations
+    user: User!
+    asset: Asset!
 }
 
 # ===============================
-#           Bodhi Trade Helper
+#           Core Events
+# ===============================
+
+type Create @entity(immutable: true) {
+    # Identity
+    id: Bytes!
+    assetId: BigInt!          # uint256
+    
+    # Info
+    sender: Bytes!            # address
+    arTxId: String!          # string
+    
+    # Metadata
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type Remove @entity(immutable: true) {
+    # Identity
+    id: Bytes!
+    assetId: BigInt!          # uint256
+    
+    # Info
+    sender: Bytes!            # address
+    
+    # Metadata
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type Trade @entity(immutable: true) {
+    # Identity
+    id: Bytes!
+    assetId: BigInt!          # uint256
+    
+    # Trade Info
+    tradeType: Int!           # uint8
+    tokenAmount: BigDecimal!
+    ethAmount: BigDecimal!
+    creatorFee: BigDecimal!
+    price: BigDecimal!
+    proxy: Int!               # uint8 (0: none, 1: space.create, 2: helper.safeBuy)
+    supplyAfterTrade: BigDecimal!  # total supply after this trade (for price calculation)
+    
+    # Participants
+    user: User!               # address
+    realSender: Bytes         # address
+    
+    # Relations
+    asset: Asset!
+    
+    # Metadata
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type Transfer @entity(immutable: true) {
+    # Identity
+    id: Bytes!
+    assetId: BigInt!          # uint256
+    amount: BigInt!           # uint256
+    
+    # Participants
+    operator: Bytes!          # address
+    from: Bytes!              # address
+    to: Bytes!                # address
+    
+    # Metadata
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+# ===============================
+#           Trade Helper
 # ===============================
 
 type SafeBuy @entity(immutable: true) {
-  id: Bytes!
-  assetId: BigInt! # uint256
-  sender: Bytes!
-  tokenAmount: BigDecimal!
-  ethAmount: BigDecimal!
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+    # Identity
+    id: Bytes!
+    assetId: BigInt!          # uint256
+    
+    # Trade Info
+    sender: Bytes!
+    tokenAmount: BigDecimal!
+    ethAmount: BigDecimal!
+    
+    # Metadata
+    blockNumber: BigInt!
+    blockTimestamp: BigInt!
+    transactionHash: Bytes!
 }
 
 type ProxyTrade @entity {
-  id: Bytes! # tx hash
-  realSender: Bytes! # address
-  proxy: Int! # uint8 (0 none, 1 space.create, 2 helper.safeBuy)
+    id: Bytes!                # tx hash
+    realSender: Bytes!        # address
+    proxy: Int!               # uint8 (0 none, 1 space.create, 2 helper.safeBuy)
 }
 
 # ===============================
-#           Space (App)
+#           Space App
 # ===============================
 
 type Space @entity {
-  id: ID! # space contract address
-  spaceId: BigInt! # can be used for sorting
-  spaceName: String!
-  spaceAddress: Bytes! # address
-  creator: User!
-  asset: Asset!
-  user: User! # space as user (for revenue)
-  totalPosts: BigInt!
+    # Identity
+    id: ID!                   # space contract address
+    spaceId: BigInt!          # can be used for sorting
+    spaceName: String!
+    spaceAddress: Bytes!      # address
+    
+    # Statistics
+    totalPosts: BigInt!
+    
+    # Relations
+    creator: User!
+    asset: Asset!
+    user: User!              # space as user (for revenue)
 }
 
 type SpacePost @entity {
-  id: ID! # asset id
-  assetId: BigInt! # for sorting (latest)
-  spaceId: BigInt!
-  asset: Asset!
-  creator: User!
-  isRoot: Boolean!
-  parentId: BigInt!
-  parent: SpacePost
-  rootId: BigInt!
-  totalReplies: BigInt!
-  removedFromSpace: Boolean!
-  children: [SpacePost!]! @derivedFrom(field: "parent")
+    # Identity
+    id: ID!                   # asset id
+    assetId: BigInt!         # for sorting (latest)
+    spaceId: BigInt!
+    
+    # Post Structure
+    isRoot: Boolean!
+    parentId: BigInt!
+    rootId: BigInt!
+    removedFromSpace: Boolean!
+    
+    # Statistics
+    totalReplies: BigInt!
+    
+    # Relations
+    asset: Asset!
+    creator: User!
+    parent: SpacePost
+    children: [SpacePost!]! @derivedFrom(field: "parent")
 }
 
 # ===============================
-#           Wishpool6 (App)
+#           Wishpool App
 # ===============================
 
 type Wish @entity {
-  id: ID!
-  asset: Asset!
-  creator: Bytes!
-  solver: Bytes
-  isOpen: Boolean!
-  responses: [Response!]! @derivedFrom(field: "wish")
-  createdAt: BigInt!
-  closedAt: BigInt
-  selectedResponse: Response
-  ethAmount: BigDecimal
-  tokenAmount: BigDecimal
+    # Identity
+    id: ID!
+    
+    # Wish Info
+    isOpen: Boolean!
+    createdAt: BigInt!
+    closedAt: BigInt
+    ethAmount: BigDecimal
+    tokenAmount: BigDecimal
+    
+    # Participants
+    creator: Bytes!
+    solver: Bytes
+    
+    # Relations
+    asset: Asset!
+    responses: [Response!]! @derivedFrom(field: "wish")
+    selectedResponse: Response
 }
 
 type Response @entity {
-  id: ID!
-  wish: Wish!
-  creator: Bytes!
-  asset: Asset!
-  submittedAt: BigInt!
-  isRewarded: Boolean!
+    # Identity
+    id: ID!
+    
+    # Response Info
+    submittedAt: BigInt!
+    isRewarded: Boolean!
+    
+    # Relations
+    wish: Wish!
+    creator: Bytes!
+    asset: Asset!
 }
