@@ -15,6 +15,7 @@ export function handleCreateWish(event: CreateWishEvent): void {
   const asset = getOrCreateAsset(event.params.wishId);
   asset.app = AppSource.WISHPOOL;
   asset.assetType = AssetType.WISH;
+  asset.realCreator = event.params.creator;
   asset.save();
 
   wish.asset = wishId;
@@ -31,6 +32,7 @@ export function handleCreateResponse(event: CreateResponseEvent): void {
   const asset = getOrCreateAsset(event.params.responseId);
   asset.app = AppSource.WISHPOOL;
   asset.assetType = AssetType.RESPONSE;
+  asset.realCreator = event.params.solver;
   asset.save();
   
   let response = new Response(responseId);
