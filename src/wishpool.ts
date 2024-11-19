@@ -52,7 +52,7 @@ export function handleCloseWish(event: CloseWishEvent): void {
   let wish = Wish.load(wishId);
   if (wish) {
     wish.isOpen = false;
-    wish.solver = event.params.solver;
+    // wish.solver = event.params.solver;  // do not update solver
     wish.closedAt = event.block.timestamp;
     wish.selectedResponse = responseId;
     wish.ethAmount = fromWei(event.params.ethAmount);
