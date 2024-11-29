@@ -4,7 +4,7 @@ import {
   Reward as RewardEvent,
 } from "../generated/Wishpool7/Wishpool7";
 import { Wish, Submission } from "../generated/schema";
-import { fromWei } from "./number";
+import { fromWei, BD_ZERO } from "./number";
 import { getOrCreateAsset } from "./store";
 import { AppSource, AssetType } from './types'
 
@@ -22,6 +22,8 @@ export function handleCreateWish(event: CreateWishEvent): void {
   wish.creator = event.params.creator;
   wish.solver = event.params.solver;
   wish.createdAt = event.block.timestamp;
+  wish.ethAmount = BD_ZERO;
+  wish.tokenAmount = BD_ZERO;
   wish.save();
 }
 
@@ -49,16 +51,21 @@ export function handleReward(event: RewardEvent): void {
 
   let wish = Wish.load(wishId);
   if (wish) {
-    wish.closedAt = event.block.timestamp;
-    wish.selectedSubmission = submissionId;
-    wish.ethAmount = fromWei(event.params.ethAmount);
-    wish.tokenAmount = fromWei(event.params.tokenAmount);
+    let ethAmount = fromWei(event.params.ethAmount);
+    let tokenAmount = fromWei(event.params.tokenAmount);
+    
+    // Update accumulated amounts
+    wish.ethAmount = wish.ethAmount.plus(ethAmount);
+    wish.tokenAmount = wish.tokenAmount.plus(tokenAmount);
     wish.save();
   }
 
   let submission = Submission.load(submissionId);
   if (submission) {
     submission.isRewarded = true;
+    submission.rewardedAt = event.block.timestamp;
+    submission.ethAmount = fromWei(event.params.ethAmount);
+    submission.tokenAmount = fromWei(event.params.tokenAmount);
     submission.save();
   }
 }

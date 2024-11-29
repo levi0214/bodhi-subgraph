@@ -231,18 +231,16 @@ type Wish @entity {
     
     # Wish Info
     createdAt: BigInt!
-    closedAt: BigInt
-    ethAmount: BigDecimal
-    tokenAmount: BigDecimal
+    ethAmount: BigDecimal!    # total rewarded ETH
+    tokenAmount: BigDecimal!  # total rewarded token
     
     # Participants
     creator: Bytes!
-    solver: Bytes
+    solver: Bytes!           # designated solver
     
     # Relations
     asset: Asset!
     submissions: [Submission!]! @derivedFrom(field: "wish")
-    selectedSubmission: Submission
 }
 
 type Submission @entity {
@@ -252,6 +250,9 @@ type Submission @entity {
     # Info
     createdAt: BigInt!
     isRewarded: Boolean!
+    rewardedAt: BigInt       # null if not rewarded
+    ethAmount: BigDecimal    # null if not rewarded
+    tokenAmount: BigDecimal  # null if not rewarded
     
     # Relations
     wish: Wish!
