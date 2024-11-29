@@ -228,15 +228,17 @@ type SpacePost @entity {
 type Wish @entity {
     # Identity
     id: ID!
-    
+
     # Wish Info
     createdAt: BigInt!
     ethAmount: BigDecimal!    # total rewarded ETH
     tokenAmount: BigDecimal!  # total rewarded token
+    totalSubmissions: BigInt! # total number of submissions
+    totalRewarded: BigInt!    # total number of submissions rewarded
     
     # Participants
     creator: Bytes!
-    solver: Bytes!           # designated solver
+    solver: Bytes!             # designated solver
     
     # Relations
     asset: Asset!

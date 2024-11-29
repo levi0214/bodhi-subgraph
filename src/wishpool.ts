@@ -4,7 +4,7 @@ import {
   Reward as RewardEvent,
 } from "../generated/Wishpool7/Wishpool7";
 import { Wish, Submission } from "../generated/schema";
-import { fromWei, BD_ZERO } from "./number";
+import { fromWei, BD_ZERO, BI_ZERO, BI_ONE } from "./number";
 import { getOrCreateAsset } from "./store";
 import { AppSource, AssetType } from './types'
 
@@ -24,10 +24,13 @@ export function handleCreateWish(event: CreateWishEvent): void {
   wish.createdAt = event.block.timestamp;
   wish.ethAmount = BD_ZERO;
   wish.tokenAmount = BD_ZERO;
+  wish.totalSubmissions = BI_ZERO;
+  wish.totalRewarded = BI_ZERO;
   wish.save();
 }
 
 export function handleSubmit(event: SubmitEvent): void {
+  let wishId = event.params.wishId.toString();
   let submissionId = event.params.submissionId.toString();
   
   const asset = getOrCreateAsset(event.params.submissionId);
@@ -37,12 +40,19 @@ export function handleSubmit(event: SubmitEvent): void {
   asset.save();
   
   let submission = new Submission(submissionId);
-  submission.wish = event.params.wishId.toString();
+  submission.wish = wishId;
   submission.creator = event.params.creator;
   submission.asset = submissionId;
   submission.createdAt = event.block.timestamp;
   submission.isRewarded = false;
   submission.save();
+
+  // Increment total submissions counter
+  let wish = Wish.load(wishId);
+  if (wish) {
+    wish.totalSubmissions = wish.totalSubmissions.plus(BI_ONE);
+    wish.save();
+  }
 }
 
 export function handleReward(event: RewardEvent): void {
@@ -57,6 +67,9 @@ export function handleReward(event: RewardEvent): void {
     // Update accumulated amounts
     wish.ethAmount = wish.ethAmount.plus(ethAmount);
     wish.tokenAmount = wish.tokenAmount.plus(tokenAmount);
+    
+    // Increment total rewarded counter
+    wish.totalRewarded = wish.totalRewarded.plus(BI_ONE);
     wish.save();
   }
 
