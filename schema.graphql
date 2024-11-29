@@ -13,7 +13,7 @@ enum AssetType {
     SPACE           # space contract
     SPACE_POST      # post in space
     WISH            # wishpool wish
-    RESPONSE        # wishpool response
+    SUBMISSION      # wishpool submission
 }
 
 type Asset @entity {
@@ -230,7 +230,6 @@ type Wish @entity {
     id: ID!
     
     # Wish Info
-    isOpen: Boolean!
     createdAt: BigInt!
     closedAt: BigInt
     ethAmount: BigDecimal
@@ -242,16 +241,16 @@ type Wish @entity {
     
     # Relations
     asset: Asset!
-    responses: [Response!]! @derivedFrom(field: "wish")
-    selectedResponse: Response
+    submissions: [Submission!]! @derivedFrom(field: "wish")
+    selectedSubmission: Submission
 }
 
-type Response @entity {
+type Submission @entity {
     # Identity
     id: ID!
     
-    # Response Info
-    submittedAt: BigInt!
+    # Info
+    createdAt: BigInt!
     isRewarded: Boolean!
     
     # Relations

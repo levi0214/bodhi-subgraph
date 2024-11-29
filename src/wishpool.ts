@@ -1,9 +1,9 @@
 import {
   CreateWish as CreateWishEvent,
-  CreateResponse as CreateResponseEvent,
-  CloseWish as CloseWishEvent,
-} from "../generated/Wishpool6/Wishpool6";
-import { Wish, Response } from "../generated/schema";
+  Submit as SubmitEvent,
+  Reward as RewardEvent,
+} from "../generated/Wishpool7/Wishpool7";
+import { Wish, Submission } from "../generated/schema";
 import { fromWei } from "./number";
 import { getOrCreateAsset } from "./store";
 import { AppSource, AssetType } from './types'
@@ -21,48 +21,44 @@ export function handleCreateWish(event: CreateWishEvent): void {
   wish.asset = wishId;
   wish.creator = event.params.creator;
   wish.solver = event.params.solver;
-  wish.isOpen = true;
   wish.createdAt = event.block.timestamp;
   wish.save();
 }
 
-export function handleCreateResponse(event: CreateResponseEvent): void {
-  let responseId = event.params.responseId.toString();
+export function handleSubmit(event: SubmitEvent): void {
+  let submissionId = event.params.submissionId.toString();
   
-  const asset = getOrCreateAsset(event.params.responseId);
+  const asset = getOrCreateAsset(event.params.submissionId);
   asset.app = AppSource.WISHPOOL;
-  asset.assetType = AssetType.RESPONSE;
-  asset.realCreator = event.params.solver;
+  asset.assetType = AssetType.SUBMISSION;
+  asset.realCreator = event.params.creator;
   asset.save();
   
-  let response = new Response(responseId);
-
-  response.wish = event.params.wishId.toString();
-  response.creator = event.params.solver;
-  response.asset = responseId;
-  response.submittedAt = event.block.timestamp;
-  response.isRewarded = false;
-  response.save();
+  let submission = new Submission(submissionId);
+  submission.wish = event.params.wishId.toString();
+  submission.creator = event.params.creator;
+  submission.asset = submissionId;
+  submission.createdAt = event.block.timestamp;
+  submission.isRewarded = false;
+  submission.save();
 }
 
-export function handleCloseWish(event: CloseWishEvent): void {
+export function handleReward(event: RewardEvent): void {
   let wishId = event.params.wishId.toString();
-  let responseId = event.params.responseId.toString();
+  let submissionId = event.params.submissionId.toString();
 
   let wish = Wish.load(wishId);
   if (wish) {
-    wish.isOpen = false;
-    // wish.solver = event.params.solver;  // do not update solver
     wish.closedAt = event.block.timestamp;
-    wish.selectedResponse = responseId;
+    wish.selectedSubmission = submissionId;
     wish.ethAmount = fromWei(event.params.ethAmount);
     wish.tokenAmount = fromWei(event.params.tokenAmount);
     wish.save();
   }
 
-  let response = Response.load(responseId);
-  if (response) {
-    response.isRewarded = true;
-    response.save();
+  let submission = Submission.load(submissionId);
+  if (submission) {
+    submission.isRewarded = true;
+    submission.save();
   }
 }

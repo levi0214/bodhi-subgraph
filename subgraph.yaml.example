@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Bodhi
-    network: optimism
+    network: mainnet
     source:
       abi: Bodhi
-      address: "0x2AD82A4E39Bac43A54DdfE6f94980AAf0D1409eF"
-      startBlock: 113209482
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      startBlock: 0
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -35,11 +35,11 @@ dataSources:
       file: ./src/bodhi.ts
   - kind: ethereum
     name: SpaceFactory
-    network: optimism
+    network: mainnet
     source:
       abi: SpaceFactory
-      address: "0xA14D19387C83b56343fC2E7a8707986aF6a74d08"
-      startBlock: 119048371
+      address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
+      startBlock: 0
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -55,11 +55,11 @@ dataSources:
       file: ./src/space-factory.ts
   - kind: ethereum
     name: BodhiTradeHelper
-    network: optimism
+    network: mainnet
     source:
       abi: BodhiTradeHelper
-      address: "0x59301bb28884b477dEc0F238c60650b60a691Eb9"
-      startBlock: 119048281
+      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+      startBlock: 0
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -73,10 +73,35 @@ dataSources:
         - event: SafeBuy(indexed uint256,indexed address,uint256,uint256)
           handler: handleSafeBuy
       file: ./src/bodhi-trade-helper.ts
+  - kind: ethereum
+    name: Wishpool7
+    network: mainnet
+    source:
+      abi: Wishpool7
+      address: "0x71089Ba41e478702e1904692385Be3972B2cBf9e"
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Wish
+        - Submission
+      abis:
+        - name: Wishpool7
+          file: ./abis/Wishpool7.json
+      eventHandlers:
+        - event: CreateWish(indexed uint256,indexed address,indexed address)
+          handler: handleCreateWish
+        - event: Submit(indexed uint256,indexed address,uint256)
+          handler: handleSubmit
+        - event: Reward(indexed uint256,indexed address,indexed uint256,uint256,uint256)
+          handler: handleReward
+      file: ./src/wishpool.ts
 templates:
   - kind: ethereum
     name: Space
-    network: optimism
+    network: mainnet
     source:
       abi: Space
     mapping:

@@ -9,5 +9,5 @@ export class AssetType {
   static SPACE: string = "SPACE"
   static SPACE_POST: string = "SPACE_POST"
   static WISH: string = "WISH"
-  static RESPONSE: string = "RESPONSE"
+  static SUBMISSION: string = "SUBMISSION"
 } 
