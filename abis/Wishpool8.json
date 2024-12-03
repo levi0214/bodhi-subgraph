@@ -6,6 +6,11 @@
         "name": "_bodhi",
         "type": "address",
         "internalType": "address"
+      },
+      {
+        "name": "_treasury",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "stateMutability": "nonpayable"
@@ -29,39 +34,16 @@
   },
   {
     "type": "function",
-    "name": "closeWish",
-    "inputs": [
+    "name": "TREASURY",
+    "inputs": [],
+    "outputs": [
       {
-        "name": "wishId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "responseId",
-        "type": "uint256",
-        "internalType": "uint256"
+        "name": "",
+        "type": "address",
+        "internalType": "address"
       }
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "createResponse",
-    "inputs": [
-      {
-        "name": "wishId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "arTxId",
-        "type": "string",
-        "internalType": "string"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -78,8 +60,37 @@
         "internalType": "address"
       }
     ],
-    "outputs": [],
+    "outputs": [
+      {
+        "name": "wishId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "createWishAndBuy",
+    "inputs": [
+      {
+        "name": "arTxId",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "solver",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
   },
   {
     "type": "function",
@@ -161,7 +172,30 @@
   },
   {
     "type": "function",
-    "name": "responses",
+    "name": "reward",
+    "inputs": [
+      {
+        "name": "wishId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "submissionId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "submissions",
     "inputs": [
       {
         "name": "",
@@ -190,6 +224,53 @@
   },
   {
     "type": "function",
+    "name": "submit",
+    "inputs": [
+      {
+        "name": "wishId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "arTxId",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "submissionId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "submitAndReward",
+    "inputs": [
+      {
+        "name": "wishId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "arTxId",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "wishes",
     "inputs": [
       {
@@ -208,76 +289,16 @@
         "name": "solver",
         "type": "address",
         "internalType": "address"
-      },
-      {
-        "name": "isOpen",
-        "type": "bool",
-        "internalType": "bool"
       }
     ],
     "stateMutability": "view"
   },
   {
-    "type": "event",
-    "name": "CloseWish",
-    "inputs": [
-      {
-        "name": "wishId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "solver",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "responseId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "tokenAmount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "ethAmount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "CreateResponse",
-    "inputs": [
-      {
-        "name": "wishId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "solver",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "responseId",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
+    "type": "function",
+    "name": "withdraw",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "event",
@@ -305,13 +326,75 @@
     "anonymous": false
   },
   {
+    "type": "event",
+    "name": "Reward",
+    "inputs": [
+      {
+        "name": "wishId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "to",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "submissionId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "tokenAmount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "ethAmount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Submit",
+    "inputs": [
+      {
+        "name": "wishId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "creator",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "submissionId",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
     "type": "error",
     "name": "EtherTransferFailed",
     "inputs": []
   },
   {
     "type": "error",
-    "name": "InvalidResponse",
+    "name": "InvalidSubmission",
     "inputs": []
   },
   {
