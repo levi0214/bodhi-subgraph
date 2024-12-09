@@ -50,6 +50,7 @@ export function handleRemove(event: RemoveEvent): void {
   asset.save();
 }
 
+// BUG: handle proxy trade. All the stats (pnl, avgPrice, etc.) are not updated correctly.
 export function handleTrade(event: TradeEvent): void {
   const trader = getOrCreateUser(event.params.sender);
   const asset = getOrCreateAsset(event.params.assetId);
