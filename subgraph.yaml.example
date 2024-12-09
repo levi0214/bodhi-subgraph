@@ -74,10 +74,10 @@ dataSources:
           handler: handleSafeBuy
       file: ./src/bodhi-trade-helper.ts
   - kind: ethereum
-    name: Wishpool8
+    name: Wishpool
     network: mainnet
     source:
-      abi: Wishpool8
+      abi: Wishpool
       address: "0x71089Ba41e478702e1904692385Be3972B2cBf9e"
       startBlock: 0
     mapping:
@@ -88,8 +88,8 @@ dataSources:
         - Wish
         - Submission
       abis:
-        - name: Wishpool8
-          file: ./abis/Wishpool8.json
+        - name: Wishpool
+          file: ./abis/Wishpool.json
       eventHandlers:
         - event: CreateWish(indexed uint256,indexed address,indexed address)
           handler: handleCreateWish
